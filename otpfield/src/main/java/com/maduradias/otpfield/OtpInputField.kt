@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
@@ -43,7 +45,14 @@ internal fun OtpInputField(
     onFocusChanged: (Boolean) -> Unit,
     onNumberChanged: (Int?) -> Unit,
     onKeyboardBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    fieldBackgroundColor: Color? = Color.White,
+    fieldBorderRadius: Dp? = 10.dp,
+    fieldBorderColor: Color? = UI_Grey_Stroke_1,
+    cursorColor: Color? = TextGrey_400,
+    fieldTextStyle: TextStyle? = textStyle1,
+    isError: MutableState<Boolean> = mutableStateOf(false),
+    errorBoarderColor: Color? = Color.Red,
 ) {
     val text by remember(number) {
         mutableStateOf(
@@ -61,11 +70,11 @@ internal fun OtpInputField(
     Box(
         modifier = modifier
             .border(
-                width = 1.dp, color = UI_Grey_Stroke_1,
-                shape = RoundedCornerShape(10.dp)
+                width = 1.dp, color = if (isError.value) errorBoarderColor ?: Color.Red else fieldBorderColor ?: UI_Grey_Stroke_1,
+                shape = RoundedCornerShape(fieldBorderRadius ?: 10.dp)
             )
-            .clip(RoundedCornerShape(10.dp))
-            .background(Color.White),
+            .clip(RoundedCornerShape(fieldBorderRadius ?: 10.dp))
+            .background(fieldBackgroundColor ?: Color.White),
         contentAlignment = Alignment.Center
     ) {
 
@@ -79,9 +88,9 @@ internal fun OtpInputField(
                 }
             },
 
-            cursorBrush = SolidColor(TextGrey_400),
+            cursorBrush = SolidColor(cursorColor ?: TextGrey_400),
             singleLine = true,
-            textStyle = TextStyle(
+            textStyle = fieldTextStyle ?: TextStyle(
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.W400,
                 fontSize = 16.sp,
@@ -110,7 +119,7 @@ internal fun OtpInputField(
                     Text(
                         "-",
                         textAlign = TextAlign.Center,
-                        color = TextGrey_600,
+                        color = cursorColor ?: TextGrey_600,
                         fontSize = 16.sp, modifier = Modifier
                             .fillMaxSize()
                             .wrapContentSize()

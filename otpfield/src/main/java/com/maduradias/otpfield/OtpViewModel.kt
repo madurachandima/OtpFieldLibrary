@@ -5,13 +5,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-private const val VALID_OTP_CODE = "1414"
-
 internal class OtpViewModel : ViewModel() {
     private val _state = MutableStateFlow(OtpState())
     internal val state = _state.asStateFlow()
 
-    internal  fun onAction(action: OtpAction) {
+    internal fun onAction(action: OtpAction) {
         when (action) {
             is OtpAction.OnChangeFieldFocused -> {
                 _state.update {
@@ -64,10 +62,8 @@ internal class OtpViewModel : ViewModel() {
                         currentFocusedIndex = it.focusedIndex
                     )
                 },
-                isValid = if (newCode.none { it == null }) {
-                    newCode.joinToString("") == VALID_OTP_CODE
-                } else null
-            )
+
+                )
         }
     }
 
@@ -83,7 +79,7 @@ internal class OtpViewModel : ViewModel() {
             return null
         }
 
-        if (currentFocusedIndex == 3) {
+        if (currentFocusedIndex == otpFieldCount - 1) {
             return currentFocusedIndex
         }
 
