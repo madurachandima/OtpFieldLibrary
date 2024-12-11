@@ -26,7 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 internal var otpFieldCount = 4
 
 @Composable
-fun OtpScreen(
+fun OtpFields(
     modifier: Modifier = Modifier,
     onKeyboardValueChange: (String) -> Unit = {},
     fieldBackgroundColor: Color? = Color.White,
