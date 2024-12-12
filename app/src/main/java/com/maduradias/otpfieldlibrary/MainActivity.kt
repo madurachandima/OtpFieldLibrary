@@ -1,6 +1,7 @@
 package com.maduradias.otpfieldlibrary
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -11,14 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import com.maduradias.otpfield.OtpScreen
+import com.maduradias.otpfield.OtpFields
+import com.maduradias.otpfield.OtpState
 import com.maduradias.otpfieldlibrary.ui.theme.OtpFieldLibraryTheme
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,11 +34,23 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Greeting("Android")
 
-                        OtpScreen(
-                            onKeyboardValueChange = {},
+                        OtpFields(
+                            onKeyboardValueChange = {
+                                Log.d("TAG", "OtpField one : $it")
+                            },
+                            modifier = Modifier,
+                            fieldCount = 6,
+                            otpStateFlow = remember { MutableStateFlow(OtpState()) }
+                        )
+
+                        OtpFields(
+                            onKeyboardValueChange = {
+                                Log.d("TAG", "OtpField two : $it")
+                            },
                             modifier = Modifier,
                             fieldCount = 5,
-                            )
+                            otpStateFlow = remember { MutableStateFlow(OtpState()) }
+                        )
                     }
 
                 }

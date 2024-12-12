@@ -5,9 +5,18 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-internal class OtpViewModel : ViewModel() {
-    private val _state = MutableStateFlow(OtpState())
+internal class OtpViewModel(
+    private val otpStateFlow: MutableStateFlow<OtpState>,
+    private val otpFieldCount: Int = 4
+) : ViewModel() {
+
+
+    private val _state = otpStateFlow
     internal val state = _state.asStateFlow()
+
+    init {
+        state.value.code = (1..otpFieldCount).map { null }
+    }
 
     internal fun onAction(action: OtpAction) {
         when (action) {
