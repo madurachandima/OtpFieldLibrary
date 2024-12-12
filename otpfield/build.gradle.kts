@@ -76,7 +76,7 @@ afterEvaluate {
             register<MavenPublication>("release") {
                 groupId = "com.github.madurachandima"
                 artifactId = "otpfield"
-                version = "1.0.1"
+                version = "1.0.3"
                 afterEvaluate {
                     from(components["release"])
                 }
