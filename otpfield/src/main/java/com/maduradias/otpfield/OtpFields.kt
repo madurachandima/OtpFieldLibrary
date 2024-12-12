@@ -20,10 +20,12 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 
-internal var otpFieldCount = 4
 
 @Composable
 fun OtpFields(
@@ -37,12 +39,27 @@ fun OtpFields(
     fieldCount: Int? = 4,
     isError: MutableState<Boolean> = mutableStateOf(false),
     errorBoarderColor: Color? = Color.Red,
-    ) {
-
+    otpStateFlow: MutableStateFlow<OtpState>,
+) {
+    var otpFieldCount = 4
     if (fieldCount != null && fieldCount > 2)
         otpFieldCount = fieldCount
 
-    val otpViewModel = viewModel<OtpViewModel>()
+
+    val otpViewModel: OtpViewModel = viewModel(
+        key = "otpViewModel-${otpStateFlow.hashCode()}",
+        factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                if (modelClass.isAssignableFrom(OtpViewModel::class.java)) {
+                    @Suppress("UNCHECKED_CAST")
+                    return OtpViewModel(otpStateFlow, otpFieldCount) as T
+                }
+                throw IllegalArgumentException("Unknown ViewModel class")
+
+            }
+        }
+    )
+
     val state = otpViewModel.state.collectAsStateWithLifecycle()
     val focusRequesters = remember {
         List(otpFieldCount) { FocusRequester() }

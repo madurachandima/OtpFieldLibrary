@@ -1,7 +1,7 @@
 package com.maduradias.otpfield
 
-internal data class OtpState(
-    internal val code: List<Int?> = (1..otpFieldCount).map { null },
-    internal val focusedIndex: Int? = null,
-    internal val isValid: Boolean? = null
+ data class OtpState(
+     internal var code: List<Int?> = listOf(),
+     internal val focusedIndex: Int? = null,
+     internal val isValid: Boolean? = null
 )
